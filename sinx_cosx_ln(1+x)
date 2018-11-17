@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+double sin(double x)
+{
+	double sum = x;
+	int i = 1;
+	double result = 0;
+	while (fabs(sum) > 1E-5)
+	{
+		result += sum;
+		i += 2;
+		sum = -pow(x, 2) / (i * (i - 1)) * sum;
+	}
+	return result;
+}
+
+double cos(double x)
+{
+	double sum = 1;
+	int i = 0;
+	double result = 0;
+	while (fabs(sum) > 1E-5)
+	{
+		result += sum;
+		i += 2;
+		sum = -pow(x, 2) / (i * (i - 1)) * sum;
+	}
+	if (fabs(result) < 1E-3)
+	{
+		result = 0;
+	}
+	return result;
+}
+
+double ln(double x)
+{
+	int i = 1;
+	double result1 = 0;
+	double result2 = 0;
+	if (x < 1)
+	{
+		double sum = x;
+		while (fabs(sum) > 1E-5)
+		{
+			result1 += sum;
+			i++;
+			sum = -sum * x * (i - 1) / i;
+		}
+		return result1;
+	}
+	else
+	{
+		double y = -x / (x + 1);
+		double sum = y;
+		while (fabs(sum) > 1E-5)
+		{
+			result2 += sum;
+			i++;
+			sum = -sum * y * (i - 1) / i;
+		}
+		return -result2;
+	}
+}
+
+void main()
+{
+	int mode = 1;
+	double x = 0;
+
+	printf("1)sin(x)\n2)cos(x)\n3)ln(1+x) (x>-1)\n");
+enter_mode:printf("Please Select Your Mode:");
+	scanf("%d", &mode);
+	if (mode != 1 && mode != 2 && mode != 3)
+	{
+		printf("Invalid Mode!\n");
+		goto enter_mode;
+	}
+
+enter_x:printf("Please Enter Your \"x\":");
+	scanf("%lf", &x);
+
+	switch (mode)
+	{
+	case 1:
+		printf("sin(x)=%lf", sin(x));
+		break;
+	case 2:
+		printf("cos(x)=%lf", cos(x));
+		break;
+	case 3:
+		if (x > -1)
+		{
+			printf("ln(1+x)=%lf", ln(x));
+		}
+		else
+		{
+			printf("Failed!Please reEnter A New Number!\n");
+			goto enter_x;
+		}
+		break;
+	}
+	printf("\n");
+	system("pause");
+}
